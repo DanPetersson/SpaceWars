@@ -1,0 +1,49 @@
+ToDo improvements.txt
+
+----------------------------------------------------
+Backlog
+----------------------------------------------------
+
+- Admin:	Upload to Github
+- Admin:	Better verison control
+- Code:		Add better path support (for e.g. image folder for mac)
+
+- Menu:		Choose difficulty level
+- Menu:		Choose spaceship
+- Menu:		Save high scores
+
+- Steering:	Add additional buttons for e.g. fire
+- Steering: Add option of touchpad and/or mouse
+- Steering:	P, Q and/or Esc : to mini menu
+			continue, to menu, quit game
+- Steering: Mouse click in menues
+
+
+- Bullets:	Multiple bullets (remedy higher speed)
+- Visual:	Real bang when player hit
+
+- Aliens:	Shoot back
+
+----------------------------------------------------
+Done
+----------------------------------------------------
+v0.01	v0.8 of SpaceInvadors as base
+v0.02	Menu:	Adding Pause
+v0.03	Game: 	Moving background 
+
+
+
+
+
+
+Old SpaceInvadors
+----------------------------------------------------
+v0.6	Add loop to restart game
+v0.6	Add starting page
+v0.7	Aliens: Steer in screen (now many are outside)
+v0.7	Aliens: Different speeds (keep original speed?)
+v0.7	Aliens: Explosions images
+v0.8	Minor game updates, e.g. new images and colors
+ 	 
+
+
