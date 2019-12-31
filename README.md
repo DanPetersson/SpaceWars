@@ -5,6 +5,6 @@ Goal of the Space Wars game is to get a high score by shooting as many alien shi
 Space Wars is the first game written from scratch in Python with Pygame by Dan Petersson.  
 
 Written and tested on:
-Windows 10
-Python  3.8
+Windows 10,
+Python  3.8,
 Pygame  1.9.6
