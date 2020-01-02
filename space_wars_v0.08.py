@@ -173,7 +173,7 @@ class Button:
 		else:
 			self.clicked = False
 
-		
+
 
 # ----------------------------
 # 		Define Procedures
