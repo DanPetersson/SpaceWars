@@ -40,9 +40,15 @@ def drop_sql_table(con):
 
 con = sql_connection()
 create_sql_table(con)
-
 print_sql_table(con)
-
 drop_sql_table(con)
 
 con.close()
+
+""" How to get the highest values:
+select * 
+from your_table
+where product_price = (SELECT max(product_price) FROM your_table)
+order by id desc
+limit 1
+"""
