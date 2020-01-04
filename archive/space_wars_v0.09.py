@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Game name:		Space Invaders (change to cooler name)
+Game name:		Space Wars
 Author:			Dan Petersson
 Github link:	https://github.com/DanPetersson/SpaceWars
 
@@ -16,9 +16,13 @@ Revision updates:
 ---------------------------------------------------------
 Backlog_revision_history.txt
 
+
+									Remove this version as not working!!!!
+
 """
 
 import pygame
+import space_classes as sc
 import random
 import math
 import os
@@ -26,153 +30,6 @@ import time
 
 # initialize pygame 
 pygame.init()
-
-# Initialize fonts
-font_huge	= pygame.font.Font('freesansbold.ttf', 128)
-font_large	= pygame.font.Font('freesansbold.ttf', 64)
-font_medium	= pygame.font.Font('freesansbold.ttf', 32)
-font_small	= pygame.font.Font('freesansbold.ttf', 16)
-font_tiny	= pygame.font.Font('freesansbold.ttf', 8)
-
-# Define Game Colors
-black 	= (  0,   0,   0)
-white 	= (255, 255, 255)
-
-red 	= (200,   0,   0)
-green 	= (  0, 200,   0)
-blue 	= (  0,   0, 200)
-yellow 	= (200, 200,   0)
-
-light_red 		= (255,   0,   0)
-Light_green 	= (  0, 255,   0)
-light_blue 		= (  0,   0, 255)
-light_yellow	= (255, 255,   0)
-
-
-# ----------------------------
-# 		Define Classes
-# ----------------------------
-
-class SpaceObject:
-
-	def __init__(self, image, explosion_image, posX=0, posY=0, speedX = 0, speedY = 0, sizeX = 64, sizeY = 64, 
-					state = 'show', sound = ' ', hit_points = 1):
-		#self.namme	= name
-		self.image  = image
-		self.explosion_image = explosion_image 
-		self.sizeX  = sizeX
-		self.sizeY  = sizeY
-		self.posX   = posX
-		self.posY   = posY
-		self.speedX = speedX
-		self.speedY	= speedY
-		self.state	= state		# 'hide', 'show'
-		self.sound 	= sound
-		self.explosion_counter = -1
-		self.hit_points = hit_points
-
-	def show(self):
-		if self.state == 'show' and self.explosion_counter <= 0:
-			screen.blit(self.image, (int(self.posX), int(self.posY)))
-		elif self.explosion_counter > 0:
-			screen.blit(self.explosion_image, (int(self.posX), int(self.posY)))
-			
-class SpaceShip(SpaceObject):
-    
-    # def __init__(self):
-    #     super().__init__()
-
-	def update_player_postion(self, screen_sizeX, screen_sizeY):
-
-		# Update X position (update with min/max)
-		self.posX += self.speedX
-		if self.posX < 0:
-			self.posX = 0
-		elif self.posX > screen_sizeX-self.sizeX:
-			self.posX = screen_sizeX-self.sizeX
-
-		# Update Y position (update with min/max)
-		self.posY += self.speedY
-		if self.posY < 0:
-			self.posY = 0
-		elif self.posY > screen_sizeY-self.sizeY:
-			self.posY = screen_sizeY-self.sizeY
-
-
-class SpaceEnemy(SpaceObject):
-
-	def update_enemy_position(self, screen_sizeX, screen_sizeY):
-
-		# Update X position
-		self.posX += self.speedX
-
-		# Update Y position
-		self.posY += self.speedY
-
-class Bullet(SpaceObject):
-
-	def update_bullet_position(self, screen_sizeX, screen_sizeY):
-
-		# Update X position
-		self.posX += self.speedX
-
-		# Update Y position, and change state if outside screen
-		self.posY += self.speedY
-		if self.posY < -self.sizeY:
-			self.state = 'hide'
-
-
-	def fire_bullet(self, player):
-
-		self.posX = player.posX + player.sizeX/2 - self.sizeX/2
-		self.posY = player.posY
-		self.sound.play()
-		self.state = 'show'
-
-
-class Button:
-
-	def __init__(self, centerX, centerY, width, hight, text='', color=yellow, color_hoover=light_yellow, 
-		text_color=black, text_hoover=black, font=font_small):
-		self.centerX 		= int(centerX)
-		self.centerY		= int(centerY)
-		self.width 			= int(width)
-		self.hight 			= int(hight)
-		self.X				= int(centerX - width/2)
-		self.Y				= int(centerY - hight/2)
-
-		self.text 			= text
-		self.color 			= color
-		self.color_hoover	= color_hoover
-		self.text_color		= text_color
-		self.text_hoover	= text_hoover
-		self.font 			= font
-		self.clicked		= False
-
-	# internal only function ?
-	def text_objects(text, font, color):
-	    text_surface = font.render(text, True, color)
-	    return text_surface, text_surface.get_rect()
-
-	# internal only function ?
-	def message_display(text, font, color, centerX, centerY):
-	    text_surface, text_rectangle = text_objects(text, font, color)
-	    text_rectangle.center = (centerX,centerY)
-	    screen.blit(text_surface, text_rectangle)
-
-	def show(self, mouse=(0,0)):
-		if self.X < mouse[0] < self.X + self.width and self.Y < mouse[1] < self.Y + self.hight:
-			pygame.draw.rect(screen, self.color_hoover, (self.X, self.Y, self.width, self.hight))
-		else:
-			pygame.draw.rect(screen, yellow, (self.X, self.Y, self.width, self.hight))
-		message_display(self.text, self.font, black, self.centerX, self.centerY)
-
-	def check_clicked(self, mouse, mouse_click):
-		if self.X < mouse[0] < self.X + self.width and self.Y < mouse[1] < self.Y + self.hight and mouse_click[0] == 1:
-			self.clicked = True
-		else:
-			self.clicked = False
-
 
 
 # ----------------------------
@@ -198,8 +55,8 @@ def menu():
 		screen.fill(background_color)
 		screen.blit(background_image[0], (0,0))
 
-		message_display('SPACE WARS 2', font_large, yellow, int(screen_sizeX/2), int(screen_sizeY/3))
-		message_display('New Game (Y/N)', font_medium, yellow, int(screen_sizeX/2), int(screen_sizeY *3/5))
+		message_display('SPACE WARS', sc.font_large, sc.yellow, int(screen_sizeX/2), int(screen_sizeY/3))
+		message_display('New Game (Y/N)', sc.font_medium, sc.yellow, int(screen_sizeX/2), int(screen_sizeY *3/5))
 
 		# get mouse position
 		mouse = pygame.mouse.get_pos()
@@ -211,14 +68,14 @@ def menu():
 
 		yes_button_X 	= int(screen_sizeX*1/3)
 		yes_button_Y 	= 450
-		yes_button 		= Button(yes_button_X, yes_button_Y, button_width, button_hight, 'Yes')
-		yes_button.show(mouse)
+		yes_button 		= sc.Button(yes_button_X, yes_button_Y, button_width, button_hight, 'Yes')
+		yes_button.show(screen, mouse)
 		yes_button.check_clicked(mouse, mouse_click)
 
 		no_button_X 	= int(screen_sizeX*2/3)
 		no_button_Y 	= yes_button_Y
-		no_button  		= Button(no_button_X,  no_button_Y,  button_width, button_hight, 'No')
-		no_button.show(mouse)
+		no_button  		= sc.Button(no_button_X,  no_button_Y,  button_width, button_hight, 'No')
+		no_button.show(screen, mouse)
 		no_button.check_clicked(mouse, mouse_click)
 
 		if yes_button.clicked:
@@ -249,7 +106,7 @@ def menu():
 
 def paused(screen_sizeX, screen_sizeY):
 
-	largeText = pygame.font.SysFont("freesansbold",115)
+#	largeText = pygame.font.SysFont("freesansbold",115)
 	TextSurf, TextRect = text_objects("Paused", largeText)
 	TextRect.center = ((screen_sizeX/2),(screen_sizeX/2))
 	screen.blit(TextSurf, TextRect)
@@ -316,8 +173,8 @@ def show_game_over(screen_sizeX, screen_sizeY):
 		enemy[i].posY = screen_sizeY + 100
 
 	# Write text
-	message_display('GAME OVER', font_large, yellow, int(screen_sizeX/2), int(screen_sizeY/3))
-	message_display('Press Return', font_medium, yellow, int(screen_sizeX/2), int(screen_sizeY *3/5))
+	message_display('GAME OVER', font_large, sc.yellow, int(screen_sizeX/2), int(screen_sizeY/3))
+	message_display('Press Return', font_medium, sc.yellow, int(screen_sizeX/2), int(screen_sizeY *3/5))
 
 
 #############################
@@ -339,7 +196,7 @@ def show_game_over(screen_sizeX, screen_sizeY):
 screen_sizeX = 800
 screen_sizeY = 600
 screen_size = (screen_sizeX, screen_sizeY)
-background_color = black
+background_color = sc.black
 # Initialize screen
 screen = pygame.display.set_mode((screen_sizeX, screen_sizeY))
 
@@ -358,8 +215,10 @@ enemy_image	    	= [pygame.image.load(os.path.join(images_path, 'ufo_01.png')),
 				       pygame.image.load(os.path.join(images_path, 'ufo_02.png')),
 				       pygame.image.load(os.path.join(images_path, 'ufo_03.png')),
 				       pygame.image.load(os.path.join(images_path, 'ufo_04.png')),
-				       pygame.image.load(os.path.join(images_path, 'alien_01.png')),
-					   pygame.image.load(os.path.join(images_path, 'yoda.png'))]
+				       pygame.image.load(os.path.join(images_path, 'spaceship_03_usd.png')),
+				       pygame.image.load(os.path.join(images_path, 'spaceship_01_usd.png')),
+					   pygame.image.load(os.path.join(images_path, 'death_star_02.png')),
+					   pygame.image.load(os.path.join(images_path, 'death_star_03.png'))]
 explosion_image		= [pygame.image.load(os.path.join(images_path, 'explosion_01.png')),
 				       pygame.image.load(os.path.join(images_path, 'explosion_02.png'))]
 background_image	= [pygame.image.load(os.path.join(images_path, 'background_01.jpg')), 
@@ -419,14 +278,14 @@ while not quit_game:
 
 
 	# initialize player and bullet
-	player = SpaceShip(player_image, explosion_image[0], screen_sizeX/2-32, screen_sizeY-100)
-	bullet = Bullet(bullet_image, explosion_image[0], speedY = -10, sound = bullet_sound, state = 'hide', sizeX = 32, sizeY = 32)
+	player = sc.SpaceShip(player_image, explosion_image[0], screen_sizeX/2-32, screen_sizeY-100)
+	bullet = sc.Bullet(bullet_image, explosion_image[0], speedY = -10, sound = bullet_sound, state = 'hide', sizeX = 32, sizeY = 32)
 
 	# initialize enemies
 	enemy = []
 	enemy_image_index = 0
 	for i in range(num_of_enemies):
-		enemy.append(SpaceEnemy(enemy_image[enemy_image_index], explosion_image[1], speedY = level, hit_points = level))
+		enemy.append(sc.SpaceEnemy(enemy_image[enemy_image_index], explosion_image[1], speedY = level, hit_points = level))
 		enemy_respawn(enemy[i], level)
 
 
@@ -459,7 +318,7 @@ while not quit_game:
 			# increase number of enemies with higher speed
 			enemy_image_index = (level -1) % len(enemy_image)
 			for i in range(num_of_enemies, num_of_enemies+level_enemy_increase):
-				enemy.append(SpaceEnemy(enemy_image[enemy_image_index], explosion_image[1], speedY = level, hit_points = level))
+				enemy.append(sc.SpaceEnemy(enemy_image[enemy_image_index], explosion_image[1], speedY = level, hit_points = level))
 				enemy_respawn(enemy[i], level)
 			num_of_enemies	+= level_enemy_increase
 
